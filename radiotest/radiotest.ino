@@ -20,8 +20,9 @@ byte addresses[][6] = {"1Node","2Node"};
 
 // Used to control whether this node is sending or receiving
 bool role = 1;
-int output;
+unsigned int output;
 void setup() {
+  output = 0;
   Serial.begin(115200);
   Serial.println(F("RF24/examples/GettingStarted"));
   Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
@@ -49,13 +50,15 @@ void setup() {
 }
 
 void loop() {
-    radio.write( &output, sizeof(int) );
+    //output = 0xC040;
+    radio.write(&output, 2);
     
     while(1){
       if (Serial.available() >= 2) {
-        int a = Serial.read();
-        int b = Serial.read();
-        output = a << 8 | b
+        byte a = Serial.read();
+        byte b = Serial.read();
+        output = (((int)a|0x80) << 8) | b;
+        Serial.println(output);
       }
       else{
         break;
