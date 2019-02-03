@@ -41,7 +41,7 @@ for each in sp:
     print(str(x) + ": " + each)
     x += 1
 x = int(input())
-ser = serial.Serial(sp[x],115200)
+ser = serial.Serial(sp[x],57600)
 pygame.joystick.init()
 joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
 x = 0

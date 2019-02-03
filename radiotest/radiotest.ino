@@ -20,12 +20,10 @@ byte addresses[][6] = {"1Node","2Node"};
 
 // Used to control whether this node is sending or receiving
 bool role = 1;
-unsigned int output;
+unsigned int output = 0;
 void setup() {
   output = 0;
-  Serial.begin(115200);
-  Serial.println(F("RF24/examples/GettingStarted"));
-  Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
+  Serial.begin(57600);
   
   radio.begin();
 
@@ -51,8 +49,7 @@ void setup() {
 
 void loop() {
     //output = 0xC040;
-    radio.write(&output, 2);
-    
+    while(!Serial.available());//should block sending if the python script isnt running which will force the other end to disable itself, assuming everything works.
     while(1){
       if (Serial.available() >= 2) {
         byte a = Serial.read();
@@ -64,6 +61,8 @@ void loop() {
         break;
       }
     }
+    radio.write(&output, 2);
+
 
 
 } // Loop
